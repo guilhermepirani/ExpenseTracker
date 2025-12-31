@@ -1,18 +1,22 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-echo 'Ready to commit changes!'
+echo
+echo 'Runnig Pre-Commit GitHook...'
 
-echo 'Format'
+echo
+echo 'Formatting...'
 
 dotnet husky run --name dotnet-format-staged-files
 
-echo 'Build'
+echo
+echo 'Building...'
 
-dotnet build --no-restore
+dotnet build
 
-echo 'Test'
+echo
+echo 'Testing...'
 
-dotnet test --no-restore
+dotnet test
 
-echo 'Completed pre-commit changes'
+echo
