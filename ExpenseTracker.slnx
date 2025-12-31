@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/services/" />
+  <Folder Name="/src/services/EntriesService/">
+    <Project Path="src/services/EntriesService/AppCore/AppCore.csproj" />
+    <Project Path="src/services/EntriesService/Infra/Infra.csproj" />
+    <Project Path="src/services/EntriesService/WebApi/Api.csproj" />
+  </Folder>
+</Solution>
