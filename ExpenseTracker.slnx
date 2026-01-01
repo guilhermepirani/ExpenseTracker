@@ -6,4 +6,7 @@
     <Project Path="src/services/EntriesService/Infra/Infra.csproj" />
     <Project Path="src/services/EntriesService/WebApi/Api.csproj" />
   </Folder>
+  <Folder Name="/src/sharedLibs/">
+    <Project Path="src/sharedLibs/Mediator/Mediator.csproj" />
+  </Folder>
 </Solution>

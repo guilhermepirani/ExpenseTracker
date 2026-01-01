@@ -1,0 +1,1 @@
+study project without much focus on one thing
