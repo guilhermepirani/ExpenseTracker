@@ -1,5 +1,3 @@
-using System;
-
 using Mediator.Commands;
 
 namespace AppCore.CreateEntry;
