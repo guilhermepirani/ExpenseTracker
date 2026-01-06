@@ -9,4 +9,10 @@
   <Folder Name="/src/sharedLibs/">
     <Project Path="src/sharedLibs/Mediator/Mediator.csproj" />
   </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/sharedLibs/" />
+  <Folder Name="/tests/sharedLibs/Mediator/" />
+  <Folder Name="/tests/sharedLibs/Mediator/UnitTests/">
+    <Project Path="tests/sharedLibs/Mediator/UnitTests/Mediator.UnitTests.csproj" />
+  </Folder>
 </Solution>
