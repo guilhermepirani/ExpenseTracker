@@ -1,4 +1,5 @@
 using Mediator.Commands;
+using Mediator.Pipelines;
 using Mediator.Queries;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -27,25 +28,10 @@ public class CommandQueryDispatcher(IServiceProvider serviceProvider)
     /// <exception cref="InvalidOperationException">
     /// Thrown when no handler is found, the HandleAsync method is not found, or the task generation fails.
     /// </exception>
-    public async Task<TResult> HandleAsync<TResult>(ICommand<TResult> command,
+    public Task<TResult> HandleAsync<TResult>(ICommand<TResult> command,
         CancellationToken cancellationToken = default)
     {
-        var handlerType = typeof(ICommandHandler<,>)
-            .MakeGenericType(command.GetType(), typeof(TResult));
-
-        var handler = _serviceProvider.GetRequiredService(handlerType)
-            ?? throw new InvalidOperationException("No Handler found");
-
-        var method = handlerType.GetMethod("HandleAsync")
-            ?? throw new InvalidOperationException("No Method found");
-
-        var task = method.Invoke(handler, [command, cancellationToken])
-            as Task<TResult>;
-
-        return task is not null
-            ? await task
-            : throw new InvalidOperationException(
-                $"Failed to generate a Task for {handlerType}");
+        return ExecuteAsync(command, cancellationToken);
     }
 
     /// <summary>
@@ -58,11 +44,20 @@ public class CommandQueryDispatcher(IServiceProvider serviceProvider)
     /// <exception cref="InvalidOperationException">
     /// Thrown when no handler is found, the HandleAsync method is not found, or the task generation fails.
     /// </exception>
-    public async Task<TResult> HandleAsync<TResult>(IQuery<TResult> query,
+    public Task<TResult> HandleAsync<TResult>(IQuery<TResult> query,
         CancellationToken cancellationToken = default)
     {
-        var handlerType = typeof(IQueryHandler<,>)
-            .MakeGenericType(query.GetType(), typeof(TResult));
+        return ExecuteAsync(query, cancellationToken);
+    }
+
+    private async Task<TResult> ExecuteAsync<TResult>(
+        IRequest<TResult> request,
+        CancellationToken cancellationToken)
+    {
+        var requestType = request.GetType();
+
+        var handlerType = typeof(IRequestHandler<,>)
+            .MakeGenericType(requestType, typeof(TResult));
 
         var handler = _serviceProvider.GetRequiredService(handlerType)
             ?? throw new InvalidOperationException("No Handler found");
@@ -70,12 +65,25 @@ public class CommandQueryDispatcher(IServiceProvider serviceProvider)
         var method = handlerType.GetMethod("HandleAsync")
             ?? throw new InvalidOperationException("No Method found");
 
-        var task = method.Invoke(handler, [query, cancellationToken])
-            as Task<TResult>;
+        var behaviourType = typeof(IPipelineBehaviour<,>)
+            .MakeGenericType(requestType, typeof(TResult));
 
-        return task is not null
-            ? await task
-            : throw new InvalidOperationException(
-                $"Failed to generate a Task for {handlerType}");
+        var behaviours = _serviceProvider.GetServices(behaviourType).Reverse()
+            ?? throw new InvalidOperationException("No Behaviour found");
+
+        var behaviourHandlerMethod = behaviourType.GetMethod("HandleAsync")
+            ?? throw new InvalidOperationException("No Behaviour Method found");
+
+        RequestHandlerDelegate<TResult> handlerDelegate = () =>
+            (Task<TResult>)method.Invoke(handler, [request, cancellationToken])!;
+
+        foreach (var behaviour in behaviours)
+        {
+            var next = handlerDelegate;
+            handlerDelegate = () => (Task<TResult>)behaviourHandlerMethod
+                .Invoke(behaviour, [request, next, cancellationToken])!;
+        }
+
+        return await handlerDelegate();
     }
 }

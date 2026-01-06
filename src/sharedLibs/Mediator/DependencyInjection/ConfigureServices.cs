@@ -1,7 +1,9 @@
+using System.IO.Compression;
 using System.Reflection;
 
 using Mediator.Commands;
 using Mediator.Dispatcher;
+using Mediator.Pipelines;
 using Mediator.Queries;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -33,5 +35,17 @@ public static class ConfigureServices
         );
 
         services.AddTransient<IDispatcher, CommandQueryDispatcher>();
+    }
+
+    /// <summary>
+    /// Adds the given behaviour to the program. 
+    /// If multiple, the order of addition is the order of execution.
+    /// </summary>
+    /// <param name="behaviour">The typeof of your behaviour</param>
+    public static void AddBehaviour(
+        this IServiceCollection services,
+        Type behaviour)
+    {
+        services.AddScoped(typeof(IPipelineBehaviour<,>), behaviour);
     }
 }

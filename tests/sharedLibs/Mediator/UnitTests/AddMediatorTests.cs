@@ -12,7 +12,8 @@ namespace Mediator.UnitTests;
 /// <summary>
 /// Tests for ConfigureServices dependency injection configuration.
 /// </summary>
-public class ConfigureServicesTests
+[Trait("Category", "AddMediator")]
+public class AddMediatorTests
 {
     [Fact]
     public void WithValidAssembly_RegistersCommandHandlers()

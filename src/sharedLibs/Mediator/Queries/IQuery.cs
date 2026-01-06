@@ -1,3 +1,3 @@
 namespace Mediator.Queries;
 
-public interface IQuery<out T>;
+public interface IQuery<out T> : IRequest<T>;

@@ -1,5 +1,8 @@
 using Mediator.Commands;
 using Mediator.Dispatcher;
+using Mediator.Pipelines;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 
@@ -13,6 +16,10 @@ public class CommandHandlerTests
     [Fact]
     public async Task WithValidCommand_ReturnsCorrectResult()
     {
+        // Note: Behaviors are explicitly configured as empty (no pipeline behaviors in this test).
+        // This is intentional as we're testing basic command dispatch without interceptors.
+        // The mock builder handles GetServices(IPipelineBehaviour<,>) to satisfy the dispatcher contract.
+
         // Arrange
         const int expectedResult = 42;
         var command = new TestCommand<int>();
@@ -73,11 +80,22 @@ public class CommandHandlerTests
             .ReturnsAsync(expectedResult);
 
         var serviceProviderMock = new Mock<IServiceProvider>();
-        var handlerType = typeof(ICommandHandler<,>)
+        var handlerType = typeof(IRequestHandler<,>)
             .MakeGenericType(typeof(TestCommand<object>), typeof(object));
+        var behaviourType = typeof(IPipelineBehaviour<,>)
+            .MakeGenericType(typeof(TestCommand<object>), typeof(object));
+        var behaviourEnumerableType = typeof(IEnumerable<>).MakeGenericType(behaviourType);
+
         serviceProviderMock
-            .Setup(sp => sp.GetService(handlerType))
-            .Returns(handlerMock.Object);
+            .Setup(sp => sp.GetService(It.IsAny<Type>()))
+            .Returns((Type serviceType) =>
+            {
+                if (serviceType == handlerType)
+                    return handlerMock.Object;
+                if (serviceType == behaviourEnumerableType)
+                    return Enumerable.Empty<object>();
+                return null;
+            });
 
         var dispatcher = new CommandQueryDispatcher(serviceProviderMock.Object);
 
@@ -128,11 +146,22 @@ public class CommandHandlerTests
             .ThrowsAsync(expectedException);
 
         var serviceProviderMock = new Mock<IServiceProvider>();
-        var handlerType = typeof(ICommandHandler<,>)
+        var handlerType = typeof(IRequestHandler<,>)
             .MakeGenericType(typeof(TestCommand<int>), typeof(int));
+        var behaviourType = typeof(IPipelineBehaviour<,>)
+            .MakeGenericType(typeof(TestCommand<int>), typeof(int));
+        var behaviourEnumerableType = typeof(IEnumerable<>).MakeGenericType(behaviourType);
+
         serviceProviderMock
-            .Setup(sp => sp.GetService(handlerType))
-            .Returns(handlerMock.Object);
+            .Setup(sp => sp.GetService(It.IsAny<Type>()))
+            .Returns((Type serviceType) =>
+            {
+                if (serviceType == handlerType)
+                    return handlerMock.Object;
+                if (serviceType == behaviourEnumerableType)
+                    return Enumerable.Empty<object>();
+                return null;
+            });
 
         var dispatcher = new CommandQueryDispatcher(serviceProviderMock.Object);
 
@@ -189,11 +218,22 @@ public class CommandHandlerTests
             });
 
         var serviceProviderMock = new Mock<IServiceProvider>();
-        var handlerType = typeof(ICommandHandler<,>)
+        var handlerType = typeof(IRequestHandler<,>)
             .MakeGenericType(typeof(TestCommand<int>), typeof(int));
+        var behaviourType = typeof(IPipelineBehaviour<,>)
+            .MakeGenericType(typeof(TestCommand<int>), typeof(int));
+        var behaviourEnumerableType = typeof(IEnumerable<>).MakeGenericType(behaviourType);
+
         serviceProviderMock
-            .Setup(sp => sp.GetService(handlerType))
-            .Returns(handlerMock.Object);
+            .Setup(sp => sp.GetService(It.IsAny<Type>()))
+            .Returns((Type serviceType) =>
+            {
+                if (serviceType == handlerType)
+                    return handlerMock.Object;
+                if (serviceType == behaviourEnumerableType)
+                    return Enumerable.Empty<object>();
+                return null;
+            });
 
         var dispatcher = new CommandQueryDispatcher(serviceProviderMock.Object);
 

@@ -1,5 +1,6 @@
 using Mediator.Commands;
 using Mediator.Dispatcher;
+using Mediator.Pipelines;
 using Mediator.Queries;
 
 using Moq;
@@ -38,17 +39,29 @@ public class EdgeCaseTestsTests
 
         var serviceProviderMock = new Mock<IServiceProvider>();
 
-        var commandHandlerType = typeof(ICommandHandler<,>)
+        var commandHandlerType = typeof(IRequestHandler<,>)
             .MakeGenericType(typeof(TestCommand<int>), typeof(int));
-        var queryHandlerType = typeof(IQueryHandler<,>)
+        var queryHandlerType = typeof(IRequestHandler<,>)
             .MakeGenericType(typeof(TestQuery<int>), typeof(int));
+        var commandBehaviourType = typeof(IPipelineBehaviour<,>)
+            .MakeGenericType(typeof(TestCommand<int>), typeof(int));
+        var queryBehaviourType = typeof(IPipelineBehaviour<,>)
+            .MakeGenericType(typeof(TestQuery<int>), typeof(int));
+        var commandBehaviourEnumerableType = typeof(IEnumerable<>).MakeGenericType(commandBehaviourType);
+        var queryBehaviourEnumerableType = typeof(IEnumerable<>).MakeGenericType(queryBehaviourType);
 
         serviceProviderMock
-            .Setup(sp => sp.GetService(commandHandlerType))
-            .Returns(commandHandlerMock.Object);
-        serviceProviderMock
-            .Setup(sp => sp.GetService(queryHandlerType))
-            .Returns(queryHandlerMock.Object);
+            .Setup(sp => sp.GetService(It.IsAny<Type>()))
+            .Returns((Type serviceType) =>
+            {
+                if (serviceType == commandHandlerType)
+                    return commandHandlerMock.Object;
+                if (serviceType == queryHandlerType)
+                    return queryHandlerMock.Object;
+                if (serviceType == commandBehaviourEnumerableType || serviceType == queryBehaviourEnumerableType)
+                    return Enumerable.Empty<object>();
+                return null;
+            });
 
         var dispatcher = new CommandQueryDispatcher(serviceProviderMock.Object);
 
@@ -92,17 +105,29 @@ public class EdgeCaseTestsTests
             .ReturnsAsync("result");
 
         var serviceProviderMock = new Mock<IServiceProvider>();
-        var intHandlerType = typeof(ICommandHandler<,>)
+        var intHandlerType = typeof(IRequestHandler<,>)
             .MakeGenericType(typeof(TestCommand<int>), typeof(int));
-        var stringHandlerType = typeof(ICommandHandler<,>)
+        var stringHandlerType = typeof(IRequestHandler<,>)
             .MakeGenericType(typeof(TestCommand<string>), typeof(string));
+        var intBehaviourType = typeof(IPipelineBehaviour<,>)
+            .MakeGenericType(typeof(TestCommand<int>), typeof(int));
+        var stringBehaviourType = typeof(IPipelineBehaviour<,>)
+            .MakeGenericType(typeof(TestCommand<string>), typeof(string));
+        var intBehaviourEnumerableType = typeof(IEnumerable<>).MakeGenericType(intBehaviourType);
+        var stringBehaviourEnumerableType = typeof(IEnumerable<>).MakeGenericType(stringBehaviourType);
 
         serviceProviderMock
-            .Setup(sp => sp.GetService(intHandlerType))
-            .Returns(intHandlerMock.Object);
-        serviceProviderMock
-            .Setup(sp => sp.GetService(stringHandlerType))
-            .Returns(stringHandlerMock.Object);
+            .Setup(sp => sp.GetService(It.IsAny<Type>()))
+            .Returns((Type serviceType) =>
+            {
+                if (serviceType == intHandlerType)
+                    return intHandlerMock.Object;
+                if (serviceType == stringHandlerType)
+                    return stringHandlerMock.Object;
+                if (serviceType == intBehaviourEnumerableType || serviceType == stringBehaviourEnumerableType)
+                    return Enumerable.Empty<object>();
+                return null;
+            });
 
         var dispatcher = new CommandQueryDispatcher(serviceProviderMock.Object);
 

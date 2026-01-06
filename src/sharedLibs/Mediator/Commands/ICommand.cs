@@ -1,3 +1,3 @@
 namespace Mediator.Commands;
 
-public interface ICommand<out T>;
+public interface ICommand<out T> : IRequest<T>;
