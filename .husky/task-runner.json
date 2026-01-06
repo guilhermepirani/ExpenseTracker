@@ -24,6 +24,26 @@
             "--args",
             "${args}"
          ]
+      },
+      {
+         "name": "build-solution",
+         "command": "dotnet",
+         "args": [
+            "build",
+            "--verbosity",
+            "q"
+         ]
+      },
+      {
+         "name": "run-tests",
+         "command": "dotnet",
+         "args": [
+            "test",
+            "--no-restore",
+            "--no-build",
+            "--verbosity",
+            "q"
+         ]
       }
    ]
 }

@@ -12,11 +12,11 @@ dotnet husky run --name dotnet-format-staged-files
 echo
 echo 'Building...'
 
-dotnet build
+dotnet husky run --name build-solution
 
 echo
 echo 'Testing...'
 
-dotnet test
+dotnet husky run --name run-tests
 
 echo
