@@ -21,6 +21,7 @@ Log.Logger = new LoggerConfiguration()
 builder.Services.AddOpenApi();
 builder.Services.AddMediator(typeof(Program).Assembly);
 builder.Services.AddBehaviour(typeof(LoggingBeheviour<,>));
+builder.Services.AddBehaviour(typeof(ExceptionHandlingBehaviour<,>));
 builder.Services.AddBehaviour(typeof(ValidationBeheviour<,>));
 builder.Services.AddVersionedEndpoints(typeof(Program).Assembly);
 
