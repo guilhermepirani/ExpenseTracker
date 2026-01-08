@@ -1,10 +1,10 @@
-using EntriesService.AppCore.Behaviours;
+using AppCore.Behaviours;
 
 using Mediator.DependencyInjection;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EntriesService.AppCore.Configuration;
+namespace AppCore.Configuration;
 
 public static class PipelineConfiguration
 {

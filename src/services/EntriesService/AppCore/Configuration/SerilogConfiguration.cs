@@ -1,7 +1,7 @@
 using Serilog;
 using Serilog.Events;
 
-namespace EntriesService.AppCore.Configuration;
+namespace AppCore.Configuration;
 
 public static class SerilogConfiguration
 {
