@@ -14,13 +14,13 @@ public class LoggingBeheviour<TRequest, TResponse>
         CancellationToken cancellationToken = default)
     {
         Log.Information(
-            "Starting request of type {RequestType}",
+            "Starting {RequestType} with body: {REQUEST}.",
             typeof(TRequest).Name); ;
 
         var response = await next();
 
         Log.Information(
-            "Finished request of type {RequestType}",
+            "Finished {RequestType}.",
             typeof(TRequest).Name);
 
         return response;

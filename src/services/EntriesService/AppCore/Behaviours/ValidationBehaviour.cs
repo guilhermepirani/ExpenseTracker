@@ -1,3 +1,6 @@
+using System.Net;
+using System.Net.Cache;
+
 using FluentValidation;
 
 using Mediator;
@@ -5,6 +8,7 @@ using Mediator.Commands;
 using Mediator.Pipelines;
 
 using Serilog;
+using Serilog.Context;
 
 namespace AppCore.Behaviours;
 
@@ -25,7 +29,8 @@ public class ValidationBeheviour<TRequest, TResponse>
     {
         if (_validators.Any())
         {
-            Log.Information("Validators are checking the request.");
+
+            Log.Information("Validators are checking the request properties.");
             var validationContext = new ValidationContext<TRequest>(request);
 
             var validationResult = await Task.WhenAll(
@@ -42,7 +47,7 @@ public class ValidationBeheviour<TRequest, TResponse>
             }
         }
 
-        Log.Information("Validators accepeted the request.");
+        Log.Information("Validators accepted the request properties.");
 
         var response = await next();
 
