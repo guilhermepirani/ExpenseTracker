@@ -3,7 +3,7 @@ using Mediator.Pipelines;
 
 using Serilog;
 
-namespace EntriesService.Api.Behaviours;
+namespace EntriesService.AppCore.Behaviours;
 
 public class ExceptionHandlingBehaviour<TRequest, TResponse>
     : IPipelineBehaviour<TRequest, TResponse>
