@@ -11,6 +11,6 @@ public class CreateEntryCommandHandler
         await Task.Yield();
         throw new Exception("Teste");
         var response = new CreateEntryResponse { Id = 5 };
-        return Result<CreateEntryResponse>.Success(response);
+        return Result<CreateEntryResponse>.Success(201, response);
     }
 }

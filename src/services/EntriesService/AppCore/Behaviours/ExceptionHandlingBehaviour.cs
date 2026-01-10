@@ -21,10 +21,11 @@ public class ExceptionHandlingBehaviour<TRequest, TResponse>
         catch (Exception ex)
         {
             Log.Error(
-                "Unhandled exception during request processing. {message}",
+                "Unhandled exception during request processing. Message: {message}",
                 ex.Message);
 
-            return ResultFactory.CreateFailure<TResponse>(new[] { ex.Message });
+            return ResultFactory.CreateFailure<TResponse>(
+                500, new[] { ex.Message });
         }
     }
 }

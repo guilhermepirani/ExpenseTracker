@@ -8,64 +8,57 @@ public class GetEntriesQueryHandler
     public async Task<Result<List<GetEntriesResponse>>> HandleAsync(GetEntriesQuery query,
         CancellationToken cancellationToken = default)
     {
-        try
+        var entry1 = new Entry
         {
-            var entry1 = new Entry
+            Id = 1,
+            Title = "Entry 1"
+        };
+
+        var entry2 = new Entry
+        {
+            Id = 2,
+            Title = "Entry 2"
+        };
+
+        var response = new List<GetEntriesResponse>();
+
+        if (query.Id is null)
+        {
+            response.Add(new GetEntriesResponse
             {
-                Id = 1,
-                Title = "Entry 1"
-            };
+                Id = entry1.Id,
+                Title = entry1.Title
+            });
 
-            var entry2 = new Entry
+            response.Add(new GetEntriesResponse
             {
-                Id = 2,
-                Title = "Entry 2"
-            };
-
-            var response = new List<GetEntriesResponse>();
-
-            if (query.Id is null)
-            {
-                response.Add(new GetEntriesResponse
-                {
-                    Id = entry1.Id,
-                    Title = entry1.Title
-                });
-
-                response.Add(new GetEntriesResponse
-                {
-                    Id = entry2.Id,
-                    Title = entry2.Title
-                });
-
-                await Task.Yield();
-                return Result<List<GetEntriesResponse>>.Success(response);
-            }
-
-            if (query.Id == entry1.Id)
-            {
-                response.Add(new GetEntriesResponse
-                {
-                    Id = entry1.Id,
-                    Title = entry1.Title
-                });
-            }
-
-            if (query.Id == entry2.Id)
-            {
-                response.Add(new GetEntriesResponse
-                {
-                    Id = entry2.Id,
-                    Title = entry2.Title
-                });
-            }
+                Id = entry2.Id,
+                Title = entry2.Title
+            });
 
             await Task.Yield();
-            return Result<List<GetEntriesResponse>>.Success(response);
+            return Result<List<GetEntriesResponse>>.Success(200, response);
         }
-        catch (Exception ex)
+
+        if (query.Id == entry1.Id)
         {
-            return Result<List<GetEntriesResponse>>.FromException(ex);
+            response.Add(new GetEntriesResponse
+            {
+                Id = entry1.Id,
+                Title = entry1.Title
+            });
         }
+
+        if (query.Id == entry2.Id)
+        {
+            response.Add(new GetEntriesResponse
+            {
+                Id = entry2.Id,
+                Title = entry2.Title
+            });
+        }
+
+        await Task.Yield();
+        return Result<List<GetEntriesResponse>>.Success(200, response);
     }
 }

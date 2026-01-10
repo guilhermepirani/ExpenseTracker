@@ -41,12 +41,14 @@ public class ValidationBeheviour<TRequest, TResponse>
                     validationFailures);
 
                 return ResultFactory.CreateFailure<TResponse>(
-                    validationFailures.Select(f => f.ErrorMessage).ToArray());
+                    400,
+                    validationFailures
+                        .Select(f => f.ErrorMessage)
+                        .ToArray());
             }
         }
 
         Log.Information("Validators accepted the request properties.");
-
         return await next();
     }
 }
