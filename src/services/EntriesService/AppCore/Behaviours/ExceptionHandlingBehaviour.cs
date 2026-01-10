@@ -23,8 +23,8 @@ public class ExceptionHandlingBehaviour<TRequest, TResponse>
         catch (Exception ex)
         {
             Log.Error(
-                "Unhandled exception during request processing. Message: {message}",
-                ex.Message);
+                "Unhandled exception during request processing. Message: {ex}",
+                ex);
 
             return ResultFactory.CreateFailure<TResponse>(
                 HttpStatusCode.InternalServerError,
