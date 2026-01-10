@@ -1,20 +1,16 @@
-using System.Net;
-using System.Net.Cache;
-
 using FluentValidation;
 
 using Mediator;
-using Mediator.Commands;
 using Mediator.Pipelines;
 
 using Serilog;
-using Serilog.Context;
 
 namespace AppCore.Behaviours;
 
 public class ValidationBeheviour<TRequest, TResponse>
     : IPipelineBehaviour<TRequest, TResponse>
-    where TRequest : ICommand<TResponse>
+    where TRequest : IRequest<TResponse>
+    where TResponse : ResultBase, new()
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
@@ -29,8 +25,6 @@ public class ValidationBeheviour<TRequest, TResponse>
     {
         if (_validators.Any())
         {
-
-            Log.Information("Validators are checking the request properties.");
             var validationContext = new ValidationContext<TRequest>(request);
 
             var validationResult = await Task.WhenAll(
@@ -43,14 +37,16 @@ public class ValidationBeheviour<TRequest, TResponse>
 
             if (validationFailures.Count > 0)
             {
-                throw new ValidationException(validationFailures);
+                Log.Information("Validators refused the request properties: {failures}.",
+                    validationFailures);
+
+                return ResultFactory.CreateFailure<TResponse>(
+                    validationFailures.Select(f => f.ErrorMessage).ToArray());
             }
         }
 
         Log.Information("Validators accepted the request properties.");
 
-        var response = await next();
-
-        return response;
+        return await next();
     }
 }

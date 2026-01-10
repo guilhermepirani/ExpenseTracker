@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 using AppCore.CreateEntry;
 
 using Mediator.Dispatcher;
@@ -17,12 +15,16 @@ public class CreateEntryEndpoint : IEndpoint
         routeBuilder.MapPost("/entries", async (
             [FromBody] CreateEntryCommand command,
             IDispatcher dispatcher,
+            HttpContext httpContext,
             CancellationToken cancellationToken) =>
         {
             // Expand command properties on the log context
             LogContext.PushProperty("REQUEST", command, true);
 
-            return await dispatcher.HandleAsync(command, cancellationToken);
+            var result = await dispatcher.HandleAsync(command, cancellationToken);
+
+            // Set HTTP status code and return result
+            return result;
 
         })
         .MapToApiVersion(1);

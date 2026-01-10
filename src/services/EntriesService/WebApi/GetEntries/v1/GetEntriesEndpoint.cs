@@ -14,6 +14,7 @@ public class GetEntriesEndpoint : IEndpoint
     {
         routeBuilder.MapGet("/entries", async (
             IDispatcher dispatcher,
+            HttpContext httpContext,
             CancellationToken cancellationToken) =>
         {
             var query = new GetEntriesQuery();
@@ -21,13 +22,17 @@ public class GetEntriesEndpoint : IEndpoint
             // Expand query properties on the log context
             LogContext.PushProperty("REQUEST", query, true);
 
-            return await dispatcher.HandleAsync(query, cancellationToken);
+            var result = await dispatcher.HandleAsync(query, cancellationToken);
+
+            // Map Result to HTTP response with appropriate status code
+            return result;
         })
         .MapToApiVersion(1);
 
         routeBuilder.MapGet("/entries/{id}", async (
             [FromRoute] int id,
             IDispatcher dispatcher,
+            HttpContext httpContext,
             CancellationToken cancellationToken) =>
         {
             var query = new GetEntriesQuery() { Id = id };
@@ -35,7 +40,11 @@ public class GetEntriesEndpoint : IEndpoint
             // Expand query properties on the log context
             LogContext.PushProperty("REQUEST", query, true);
 
-            return await dispatcher.HandleAsync(query, cancellationToken);
+            var result = await dispatcher.HandleAsync(query, cancellationToken);
+
+            // Map Result to HTTP response with appropriate status code
+
+            return result;
         })
         .MapToApiVersion(1);
     }

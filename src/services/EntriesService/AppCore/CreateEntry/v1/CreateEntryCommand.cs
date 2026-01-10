@@ -2,7 +2,7 @@ using Mediator.Commands;
 
 namespace AppCore.CreateEntry;
 
-public class CreateEntryCommand : ICommand<CreateEntryResponse>
+public class CreateEntryCommand : ICommand<Result<CreateEntryResponse>>
 {
     public required string Title { get; set; }
     public decimal Amount { get; set; }

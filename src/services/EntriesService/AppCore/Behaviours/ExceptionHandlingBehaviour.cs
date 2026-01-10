@@ -8,6 +8,7 @@ namespace AppCore.Behaviours;
 public class ExceptionHandlingBehaviour<TRequest, TResponse>
     : IPipelineBehaviour<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
+    where TResponse : ResultBase, new()
 {
     public async Task<TResponse> HandleAsync(TRequest request,
         RequestHandlerDelegate<TResponse> next,
@@ -19,9 +20,11 @@ public class ExceptionHandlingBehaviour<TRequest, TResponse>
         }
         catch (Exception ex)
         {
-            Log.Error("Finished due to unhandled exception. Message: {ex}",
-            ex);
-            throw;
+            Log.Error(
+                "Unhandled exception during request processing. {message}",
+                ex.Message);
+
+            return ResultFactory.CreateFailure<TResponse>(new[] { ex.Message });
         }
     }
 }
