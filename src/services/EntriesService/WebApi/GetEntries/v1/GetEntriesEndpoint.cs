@@ -24,7 +24,7 @@ public class GetEntriesEndpoint : IEndpoint
 
             var result = await dispatcher.HandleAsync(query, cancellationToken);
 
-            // Map Result to HTTP response with appropriate status code
+            httpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
         })
         .MapToApiVersion(1);
@@ -42,8 +42,7 @@ public class GetEntriesEndpoint : IEndpoint
 
             var result = await dispatcher.HandleAsync(query, cancellationToken);
 
-            // Map Result to HTTP response with appropriate status code
-
+            httpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
         })
         .MapToApiVersion(1);

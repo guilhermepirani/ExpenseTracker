@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace AppCore;
 
 /// <summary>
@@ -7,13 +9,13 @@ public abstract class ResultBase
 {
     public bool IsSuccess { get; protected set; }
     public string[]? Errors { get; protected set; }
-    public int StatusCode { get; set; }
+    public HttpStatusCode StatusCode { get; set; }
 
     /// <summary>
     /// Creates a failure result instance with the given errors
     /// </summary>
     public abstract ResultBase CreateFailureInstance(
-        int statusCode, string[] errors);
+        HttpStatusCode statusCode, string[] errors);
 }
 
 /// <summary>
@@ -24,7 +26,7 @@ public class Result<T> : ResultBase
     public T? Data { get; private set; }
 
     public static Result<T> Success(
-        int statusCode, T value)
+        HttpStatusCode statusCode, T value)
     {
         return new()
         {
@@ -36,7 +38,7 @@ public class Result<T> : ResultBase
     }
 
     public static Result<T> Failure(
-        int statusCode, params string[] errors)
+        HttpStatusCode statusCode, params string[] errors)
     {
         return new()
         {
@@ -48,13 +50,13 @@ public class Result<T> : ResultBase
     }
 
     public static Result<T> FromException(
-        int statusCode, Exception ex)
+        HttpStatusCode statusCode, Exception ex)
     {
         return Failure(statusCode, ex.Message);
     }
 
     public override ResultBase CreateFailureInstance(
-        int statusCode, string[] errors)
+        HttpStatusCode statusCode, string[] errors)
     {
         return Failure(statusCode, errors);
     }
@@ -75,7 +77,7 @@ public class Result : ResultBase
     }
 
     public static Result Failure(
-        int statusCode, params string[] errors)
+        HttpStatusCode statusCode, params string[] errors)
     {
         return new()
         {
@@ -86,13 +88,13 @@ public class Result : ResultBase
     }
 
     public static Result FromException(
-        int statusCode, Exception ex)
+        HttpStatusCode statusCode, Exception ex)
     {
         return Failure(statusCode, ex.Message);
     }
 
     public override ResultBase CreateFailureInstance(
-        int statusCode, string[] errors)
+        HttpStatusCode statusCode, string[] errors)
     {
         return Failure(statusCode, errors);
     }
@@ -104,7 +106,7 @@ public class Result : ResultBase
 public static class ResultFactory
 {
     public static TResult CreateFailure<TResult>(
-        int statusCode, string[] errors)
+        HttpStatusCode statusCode, string[] errors)
         where TResult : ResultBase, new()
     {
         var instance = new TResult();

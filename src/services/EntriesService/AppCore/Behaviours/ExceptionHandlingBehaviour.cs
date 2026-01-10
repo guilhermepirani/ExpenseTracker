@@ -1,3 +1,5 @@
+using System.Net;
+
 using Mediator;
 using Mediator.Pipelines;
 
@@ -25,7 +27,8 @@ public class ExceptionHandlingBehaviour<TRequest, TResponse>
                 ex.Message);
 
             return ResultFactory.CreateFailure<TResponse>(
-                500, new[] { ex.Message });
+                HttpStatusCode.InternalServerError,
+                new[] { ex.Message });
         }
     }
 }

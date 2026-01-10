@@ -23,7 +23,7 @@ public class CreateEntryEndpoint : IEndpoint
 
             var result = await dispatcher.HandleAsync(command, cancellationToken);
 
-            // Set HTTP status code and return result
+            httpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
 
         })

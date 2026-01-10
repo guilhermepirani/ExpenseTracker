@@ -1,3 +1,5 @@
+using System.Net;
+
 using Mediator.Queries;
 
 namespace AppCore.GetEntries;
@@ -37,7 +39,8 @@ public class GetEntriesQueryHandler
             });
 
             await Task.Yield();
-            return Result<List<GetEntriesResponse>>.Success(200, response);
+            return Result<List<GetEntriesResponse>>.Success(
+                HttpStatusCode.OK, response);
         }
 
         if (query.Id == entry1.Id)
@@ -59,6 +62,7 @@ public class GetEntriesQueryHandler
         }
 
         await Task.Yield();
-        return Result<List<GetEntriesResponse>>.Success(200, response);
+        return Result<List<GetEntriesResponse>>
+            .Success(HttpStatusCode.OK, response);
     }
 }

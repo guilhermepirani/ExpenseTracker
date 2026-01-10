@@ -1,3 +1,5 @@
+using System.Net;
+
 using Mediator.Commands;
 
 namespace AppCore.CreateEntry;
@@ -9,8 +11,12 @@ public class CreateEntryCommandHandler
         CancellationToken cancellationToken = default)
     {
         await Task.Yield();
-        throw new Exception("Teste");
+
+        // Test purposes
+        //throw new Exception("Teste");
+
         var response = new CreateEntryResponse { Id = 5 };
-        return Result<CreateEntryResponse>.Success(201, response);
+        return Result<CreateEntryResponse>
+            .Success(HttpStatusCode.Created, response);
     }
 }

@@ -1,3 +1,5 @@
+using System.Net;
+
 using FluentValidation;
 
 using Mediator;
@@ -41,14 +43,15 @@ public class ValidationBeheviour<TRequest, TResponse>
                     validationFailures);
 
                 return ResultFactory.CreateFailure<TResponse>(
-                    400,
+                    HttpStatusCode.BadRequest,
                     validationFailures
                         .Select(f => f.ErrorMessage)
                         .ToArray());
             }
+
+            Log.Information("Validators accepted the request properties.");
         }
 
-        Log.Information("Validators accepted the request properties.");
         return await next();
     }
 }
