@@ -1,7 +1,10 @@
 // unsetz
+
 using AppCore.Configuration;
 
 using EntriesService.Api;
+
+using Infra;
 
 using Mediator.DependencyInjection;
 
@@ -16,7 +19,7 @@ builder.Services.AddVersionedEndpoints(typeof(Program).Assembly);
 builder.Services.AddValidators();
 builder.Services.AddMediator(typeof(Program).Assembly);
 builder.Services.AddPipelineBehaviours();
-
+builder.Services.AddRespositories();
 
 var app = builder.Build();
 

@@ -6,6 +6,6 @@ public class CreateEntryCommand : ICommand<Result<CreateEntryResponse>>
 {
     public required string Title { get; set; }
     public decimal Amount { get; set; }
-    public string? Description { get; set; } = null;
+    public string? Description { get; set; } = "";
     public DateTime Date { get; set; } = DateTime.UtcNow;
 }

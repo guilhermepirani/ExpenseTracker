@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\sharedLibs\Mediator\Mediator.csproj" />
     <ProjectReference Include="..\AppCore\AppCore.csproj" />
+    <ProjectReference Include="..\Infra\Infra.csproj" />
   </ItemGroup>
 
 </Project>
