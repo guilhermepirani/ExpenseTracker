@@ -2,67 +2,56 @@ using System.Net;
 
 using Mediator.Queries;
 
+using Serilog;
+
 namespace AppCore.GetEntries;
 
 public class GetEntriesQueryHandler
     : IQueryHandler<GetEntriesQuery, Result<List<GetEntriesResponse>>>
 {
-    public async Task<Result<List<GetEntriesResponse>>> HandleAsync(GetEntriesQuery query,
+
+    private readonly IGetEntriesRepository _repository;
+
+    public GetEntriesQueryHandler(IGetEntriesRepository repository)
+    {
+        _repository = repository;
+    }
+
+    public async Task<Result<List<GetEntriesResponse>>> HandleAsync(
+        GetEntriesQuery query,
         CancellationToken cancellationToken = default)
     {
-        var entry1 = new Entry
-        {
-            Id = Guid.Parse("019baf61-3364-73dd-88c0-134ff1e76ad1"),
-            Title = "Entry 1"
-        };
-
-        var entry2 = new Entry
-        {
-            Id = Guid.Parse("019baf62-b258-746e-aad2-aba210a07bc9"),
-            Title = "Entry 2"
-        };
-
-        var response = new List<GetEntriesResponse>();
-
         if (query.Id is null)
         {
-            response.Add(new GetEntriesResponse
-            {
-                Id = entry1.Id,
-                Title = entry1.Title
-            });
+            var entriesResponse = await _repository.ExecuteAsync();
 
-            response.Add(new GetEntriesResponse
-            {
-                Id = entry2.Id,
-                Title = entry2.Title
-            });
+            Log.Information($"Query returned {entriesResponse.Count} entries.");
+            return Result<List<GetEntriesResponse>>
+                .Success(HttpStatusCode.OK, entriesResponse);
+        }
 
-            await Task.Yield();
+        var hasGuid = Guid.TryParse(query.Id, out Guid searchFor);
+
+        if (!hasGuid)
+        {
+            return ResultFactory
+                .CreateFailure<Result<List<GetEntriesResponse>>>(
+                    HttpStatusCode.InternalServerError,
+                    ["Failed to parse provided ID to UUID"]);
+        }
+
+        var entryResponse = await _repository.ExecuteAsync(searchFor);
+
+        if (entryResponse.Id == Guid.Empty)
+        {
+            Log.Information("Query returned 0 Entries.");
             return Result<List<GetEntriesResponse>>.Success(
-                HttpStatusCode.OK, response);
+                HttpStatusCode.OK, new List<GetEntriesResponse>());
         }
 
-        if (query.Id == entry1.Id)
-        {
-            response.Add(new GetEntriesResponse
-            {
-                Id = entry1.Id,
-                Title = entry1.Title
-            });
-        }
-
-        if (query.Id == entry2.Id)
-        {
-            response.Add(new GetEntriesResponse
-            {
-                Id = entry2.Id,
-                Title = entry2.Title
-            });
-        }
-
-        await Task.Yield();
-        return Result<List<GetEntriesResponse>>
-            .Success(HttpStatusCode.OK, response);
+        Log.Information("Query returned 1 Entry.");
+        return Result<List<GetEntriesResponse>>.Success(
+            HttpStatusCode.OK, new List<GetEntriesResponse>()
+                { entryResponse });
     }
 }

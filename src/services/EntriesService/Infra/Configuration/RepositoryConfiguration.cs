@@ -1,4 +1,5 @@
 using AppCore.CreateEntry;
+using AppCore.GetEntries;
 
 using Infra.CreateEntry;
 
@@ -12,6 +13,7 @@ public static class RespositoryConfiguration
         this IServiceCollection services
     )
     {
+        services.AddScoped<IGetEntriesRepository, GetEntriesRepository>();
         services.AddScoped<ICreateEntryRepository, CreateEntryRepository>();
 
         return services;

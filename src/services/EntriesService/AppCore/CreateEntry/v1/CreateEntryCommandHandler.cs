@@ -1,4 +1,3 @@
-using System.Data.Common;
 using System.Net;
 
 using Mediator.Commands;
@@ -26,7 +25,7 @@ public class CreateEntryCommandHandler
         //throw new Exception("Teste");
 
         var entry = command.MapToEntry();
-        entry.Id = Guid.CreateVersion7(entry.Date);
+        entry.Id = Guid.CreateVersion7();
 
         var response = await _repository.ExecuteAsync(entry);
 

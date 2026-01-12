@@ -30,7 +30,7 @@ public class GetEntriesEndpoint : IEndpoint
         .MapToApiVersion(1);
 
         routeBuilder.MapGet("/entries/{id}", async (
-            [FromRoute] Guid id,
+            [FromRoute] string id,
             IDispatcher dispatcher,
             HttpContext httpContext,
             CancellationToken cancellationToken) =>

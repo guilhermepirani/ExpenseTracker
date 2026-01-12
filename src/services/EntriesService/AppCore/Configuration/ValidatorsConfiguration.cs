@@ -1,4 +1,5 @@
 using AppCore.CreateEntry;
+using AppCore.GetEntries;
 
 using FluentValidation;
 
@@ -14,6 +15,8 @@ public static class ValidatorConfiguration
     {
         services.AddScoped
             <IValidator<CreateEntryCommand>, CreatyEntryValidator>();
+        services.AddScoped
+            <IValidator<GetEntriesQuery>, GetEntriesQueryValidator>();
 
         return services;
     }
