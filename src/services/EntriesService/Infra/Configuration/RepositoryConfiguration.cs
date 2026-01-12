@@ -1,7 +1,9 @@
 using AppCore.CreateEntry;
+using AppCore.DeleteEntry;
 using AppCore.GetEntries;
 
 using Infra.CreateEntry;
+using Infra.DeleteEntry;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +17,7 @@ public static class RespositoryConfiguration
     {
         services.AddScoped<IGetEntriesRepository, GetEntriesRepository>();
         services.AddScoped<ICreateEntryRepository, CreateEntryRepository>();
+        services.AddScoped<IDeleteEntryRepository, DeleteEntryRespository>();
 
         return services;
     }
