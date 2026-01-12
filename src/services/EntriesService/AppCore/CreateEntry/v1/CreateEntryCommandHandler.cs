@@ -25,7 +25,10 @@ public class CreateEntryCommandHandler
         // Test purposes
         //throw new Exception("Teste");
 
-        var response = await _repository.ExecuteAsync(command);
+        var entry = command.MapToEntry();
+        entry.Id = Guid.CreateVersion7(entry.Date);
+
+        var response = await _repository.ExecuteAsync(entry);
 
         if (response is 0)
         {
@@ -39,7 +42,7 @@ public class CreateEntryCommandHandler
 
         Log.Information("Entry created.");
 
-        var createdEntry = new CreateEntryResponse { Id = 5 };
+        var createdEntry = new CreateEntryResponse { Id = entry.Id };
         return Result<CreateEntryResponse>
             .Success(HttpStatusCode.Created, createdEntry);
     }

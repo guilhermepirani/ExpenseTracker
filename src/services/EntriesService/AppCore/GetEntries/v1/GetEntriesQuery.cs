@@ -4,5 +4,5 @@ namespace AppCore.GetEntries;
 
 public record GetEntriesQuery : IQuery<Result<List<GetEntriesResponse>>>
 {
-    public int? Id { get; set; } = null;
+    public Guid? Id { get; set; } = null;
 }

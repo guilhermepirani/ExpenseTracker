@@ -8,4 +8,15 @@ public class CreateEntryCommand : ICommand<Result<CreateEntryResponse>>
     public decimal Amount { get; set; }
     public string? Description { get; set; } = "";
     public DateTime Date { get; set; } = DateTime.UtcNow;
+
+    public Entry MapToEntry()
+    {
+        return new Entry()
+        {
+            Title = this.Title,
+            Amount = this.Amount,
+            Description = this.Description,
+            Date = this.Date
+        };
+    }
 }

@@ -1,3 +1,4 @@
+using AppCore;
 using AppCore.CreateEntry;
 
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,7 @@ public class CreateEntryRepository : ICreateEntryRepository
         _configuration = configuration;
     }
 
-    public async Task<int> ExecuteAsync(CreateEntryCommand command)
+    public async Task<int> ExecuteAsync(Entry entry)
     {
         try
         {
@@ -26,18 +27,19 @@ public class CreateEntryRepository : ICreateEntryRepository
 
             await using var source = dataSourceBuilder.Build();
             await using var cmd = new NpgsqlCommand(
-                "INSERT INTO entriesservice.entries.entries " +
-                "(title, amount, description, date) " +
-                "VALUES ($1, $2, $3, $4)",
+                "INSERT INTO entries " +
+                "(id, title, amount, description, date) " +
+                "VALUES ($1, $2, $3, $4, $5)",
                 await source.OpenConnectionAsync()
             )
             {
                 Parameters =
                 {
-                    new() { Value = command.Title },
-                    new() { Value = command.Amount },
-                    new() { Value = command.Description },
-                    new() { Value = command.Date }
+                    new() { Value = entry.Id },
+                    new() { Value = entry.Title },
+                    new() { Value = entry.Amount },
+                    new() { Value = entry.Description },
+                    new() { Value = entry.Date }
                 }
             };
 

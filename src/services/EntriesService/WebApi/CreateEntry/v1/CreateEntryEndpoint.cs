@@ -24,8 +24,15 @@ public class CreateEntryEndpoint : IEndpoint
             var result = await dispatcher.HandleAsync(command, cancellationToken);
 
             httpContext.Response.StatusCode = (int)result.StatusCode;
-            return result;
 
+            // TODO: get address from settings
+            if (result.Data is not null)
+            {
+                httpContext.Response.Headers.Location =
+                    $"http://localhost:5199/api/v1/entries/{result.Data.Id}";
+            }
+
+            return result;
         })
         .MapToApiVersion(1);
     }

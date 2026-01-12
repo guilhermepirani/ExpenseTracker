@@ -12,13 +12,13 @@ public class GetEntriesQueryHandler
     {
         var entry1 = new Entry
         {
-            Id = 1,
+            Id = Guid.Parse("019baf61-3364-73dd-88c0-134ff1e76ad1"),
             Title = "Entry 1"
         };
 
         var entry2 = new Entry
         {
-            Id = 2,
+            Id = Guid.Parse("019baf62-b258-746e-aad2-aba210a07bc9"),
             Title = "Entry 2"
         };
 
