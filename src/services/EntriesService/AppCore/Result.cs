@@ -67,10 +67,13 @@ public class Result<T> : ResultBase
 /// </summary>
 public class Result : ResultBase
 {
+    public string? Data { get; private set; }
+
     public static Result Success()
     {
         return new()
         {
+            Data = null,
             IsSuccess = true,
             Errors = null
         };
@@ -81,6 +84,7 @@ public class Result : ResultBase
     {
         return new()
         {
+            Data = null,
             IsSuccess = false,
             Errors = errors,
             StatusCode = statusCode
