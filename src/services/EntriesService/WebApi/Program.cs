@@ -1,16 +1,9 @@
-// unsetz
-
+using Api.Configuration;
 using AppCore;
 using AppCore.Configuration;
-
-using EntriesService.Api;
-
-using Infra;
-
+using Infra.Configuration;
 using Mediator.DependencyInjection;
-
 using Microsoft.AspNetCore.Diagnostics;
-
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

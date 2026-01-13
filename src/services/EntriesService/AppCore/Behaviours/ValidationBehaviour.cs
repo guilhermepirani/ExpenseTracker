@@ -1,10 +1,7 @@
 using System.Net;
-
 using FluentValidation;
-
 using Mediator;
 using Mediator.Pipelines;
-
 using Serilog;
 
 namespace AppCore.Behaviours;

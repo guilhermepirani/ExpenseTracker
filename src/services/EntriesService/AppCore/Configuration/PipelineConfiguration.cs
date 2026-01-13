@@ -1,9 +1,5 @@
 using AppCore.Behaviours;
-using AppCore.CreateEntry;
-using AppCore.GetEntries;
-
 using Mediator.DependencyInjection;
-
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.Configuration;

@@ -1,13 +1,13 @@
-using AppCore.CreateEntry;
-using AppCore.DeleteEntry;
-using AppCore.GetEntries;
-
-using Infra.CreateEntry;
-using Infra.DeleteEntry;
+using AppCore.Features.CreateEntry.V1;
+using AppCore.Features.DeleteEntry.V1;
+using AppCore.Features.GetEntries.V1;
+using Infra.Features.CreateEntry.V1;
+using Infra.Features.DeleteEntry.V1;
+using Infra.Features.GetEntries.V1;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infra;
+namespace Infra.Configuration;
 
 public static class RespositoryConfiguration
 {

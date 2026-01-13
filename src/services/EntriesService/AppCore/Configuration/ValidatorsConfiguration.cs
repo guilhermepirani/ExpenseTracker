@@ -1,8 +1,6 @@
-using AppCore.CreateEntry;
-using AppCore.GetEntries;
-
+using AppCore.Features.CreateEntry.V1;
+using AppCore.Features.GetEntries.V1;
 using FluentValidation;
-
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.Configuration;

@@ -1,6 +1,5 @@
 using Mediator;
 using Mediator.Pipelines;
-
 using Serilog;
 
 namespace AppCore.Behaviours;

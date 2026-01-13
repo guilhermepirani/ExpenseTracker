@@ -1,11 +1,9 @@
 using System.Reflection;
-
 using Asp.Versioning;
 using Asp.Versioning.Builder;
-
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace EntriesService.Api;
+namespace Api.Configuration;
 
 public static class EndpointsConfiguration
 {
