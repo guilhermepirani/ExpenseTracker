@@ -16,7 +16,7 @@ builder.Services.AddVersionedEndpoints(typeof(Program).Assembly);
 builder.Services.AddValidators();
 builder.Services.AddMediator(typeof(Program).Assembly);
 builder.Services.AddPipelineBehaviours();
-builder.Services.AddRespositories();
+builder.Services.AddRepositories();
 
 var app = builder.Build();
 

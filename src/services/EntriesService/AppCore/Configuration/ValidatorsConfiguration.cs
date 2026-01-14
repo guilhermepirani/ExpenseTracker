@@ -1,5 +1,6 @@
 using AppCore.Features.CreateEntry.V1;
 using AppCore.Features.GetEntries.V1;
+using AppCore.Features.UpdateEntry.V1;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,8 @@ public static class ValidatorConfiguration
     {
         services.AddScoped
             <IValidator<CreateEntryCommand>, CreatyEntryValidator>();
+        services.AddScoped
+            <IValidator<UpdateEntryCommand>, UpdateEntryValidator>();
         services.AddScoped
             <IValidator<GetEntriesQuery>, GetEntriesQueryValidator>();
 
