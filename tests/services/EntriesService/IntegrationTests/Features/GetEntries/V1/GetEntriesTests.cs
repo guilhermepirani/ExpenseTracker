@@ -18,9 +18,7 @@ public class GetEntriesTests : IAsyncLifetime
     public GetEntriesTests(PostgreSqlFixture fixture)
     {
         _fixture = fixture;
-        _httpClient = fixture.CreateClient(
-            new WebApplicationFactoryClientOptions()
-            { BaseAddress = new Uri("http://localhost:5199") });
+        _httpClient = fixture.CreateClient();
     }
 
     [Fact]

@@ -19,9 +19,7 @@ public class DeleteEntryTests : IAsyncLifetime
     public DeleteEntryTests(PostgreSqlFixture fixture)
     {
         _fixture = fixture;
-        _httpClient = fixture.CreateClient(
-            new WebApplicationFactoryClientOptions()
-            { BaseAddress = new Uri("http://localhost:5199") });
+        _httpClient = fixture.CreateClient();
     }
 
     [Fact]
