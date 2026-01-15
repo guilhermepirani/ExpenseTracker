@@ -7,8 +7,8 @@ namespace AppCore;
 /// </summary>
 public abstract class ResultBase
 {
-    public bool IsSuccess { get; protected set; }
-    public string[]? Errors { get; protected set; }
+    public bool IsSuccess { get; set; }
+    public string[]? Errors { get; set; }
     public HttpStatusCode StatusCode { get; set; }
 
     /// <summary>
@@ -23,7 +23,7 @@ public abstract class ResultBase
 /// </summary>
 public class Result<T> : ResultBase
 {
-    public T? Data { get; private set; }
+    public T? Data { get; set; }
 
     public static Result<T> Success(
         HttpStatusCode statusCode, T value)
@@ -67,7 +67,7 @@ public class Result<T> : ResultBase
 /// </summary>
 public class Result : ResultBase
 {
-    public string? Data { get; private set; }
+    public string? Data { get; set; }
 
     public static Result Success()
     {
