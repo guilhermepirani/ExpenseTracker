@@ -1,10 +1,6 @@
-using System.Data.Common;
-using EntriesService.IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
-using Microsoft.VisualBasic;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Npgsql;
 using Testcontainers.PostgreSql;
