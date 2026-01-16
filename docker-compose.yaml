@@ -14,3 +14,16 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  keycloack:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KC_HEALTH_ENABLED=true
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./.containers/lib/identity:/opt/keycloak/data
+    ports:
+      - 8080:8080
+    command: start-dev

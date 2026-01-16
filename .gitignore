@@ -6,6 +6,9 @@
 # dotenv files
 .env
 
+#Container created files
+.containers
+
 # log files
 logs/*
 
